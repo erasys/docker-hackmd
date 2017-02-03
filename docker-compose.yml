@@ -6,6 +6,16 @@ services:
       - POSTGRES_USER=hackmd
       - POSTGRES_PASSWORD=hackmdpass
       - POSTGRES_DB=hackmd
+  minio:
+    image: minio/minio
+    command: ["server","/export"]
+    environment:
+      - MINIO_ACCESS_KEY=B9L3N9WNWB175W1W1KMT
+      - MINIO_SECRET_KEY=iccZuBvVSULTZTkjDzlOIQjhaWOek1ut81LMUxY
+    ports:
+      - "3333:9000"
+    volumes:
+      - /export
   hackmd:
     build: ./hackmd
     ports:
@@ -18,3 +28,8 @@ services:
       - HMD_EMAIL=false
       - HMD_ALLOW_EMAIL_REGISTER=false
       - HMD_IMAGE_UPLOAD_TYPE=filesystem
+      - HMD_S3_ENDPOINT=http://minio:9000
+      - HMD_S3_ACCESS_KEY_ID=B9L3N9WNWB175W1W1KMT
+      - HMD_S3_SECRET_ACCESS_KEY=iccZuBvVSULTZTkjDzlOIQjhaWOek1ut81LMUxY
+      #- HMD_S3_REGION=aus-east-1
+      - HMD_S3_BUCKET=docker
